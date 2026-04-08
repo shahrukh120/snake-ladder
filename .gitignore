@@ -1,1 +1,39 @@
+# 📦 Node modules (VERY important)
 node_modules/
+
+# 🔐 Environment variables
+.env
+
+# 🧾 Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# 🧠 Runtime data
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# 🧹 Coverage reports
+coverage/
+
+# 🏗️ Build files
+dist/
+build/
+
+# 🧑‍💻 IDE
+.vscode/
+.idea/
+
+# 🍎 Mac
+.DS_Store
+
+# 🪟 Windows
+Thumbs.db
+
+# 🔥 Temporary
+*.tmp
+*.temp

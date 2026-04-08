@@ -9,10 +9,8 @@
 </head>
 <body>
 
-  <!-- Toast Container -->
   <div class="toast-container" id="toast-container"></div>
 
-  <!-- ─── Lobby ──────────────────────────────── -->
   <div id="lobby">
     <h1 class="lobby-title">Snake & Ladder</h1>
     <p class="lobby-subtitle">Multiplayer Board Game</p>
@@ -40,7 +38,6 @@
     </div>
   </div>
 
-  <!-- ─── Waiting Room ──────────────────────── -->
   <div id="waiting-room">
     <div class="waiting-card">
       <h2>Waiting Room</h2>
@@ -55,7 +52,6 @@
     </div>
   </div>
 
-  <!-- ─── Game Screen ───────────────────────── -->
   <div id="game-screen">
     <div class="game-layout">
       <div class="board-container">
@@ -63,33 +59,27 @@
       </div>
 
       <div class="side-panel">
-        <!-- Turn Indicator -->
         <div class="panel-card">
           <h3>Current Turn</h3>
           <div class="turn-indicator" id="turn-indicator">Waiting...</div>
         </div>
 
-        <!-- Number Chooser -->
         <div class="panel-card" id="chooser-panel">
           <h3>Choose Your Number</h3>
           <div class="number-chooser" id="number-chooser">
-            <!-- Filled by JS -->
-          </div>
+            </div>
         </div>
 
-        <!-- Scoreboard -->
         <div class="panel-card">
           <h3>Players</h3>
           <div id="scoreboard"></div>
         </div>
 
-        <!-- Move Log -->
         <div class="panel-card">
           <h3>Move Log</h3>
           <div class="move-log" id="move-log"></div>
         </div>
 
-        <!-- Chat Box -->
         <div class="panel-card chat-panel">
           <h3>Chat</h3>
           <div class="chat-messages" id="chat-messages"></div>
@@ -104,7 +94,6 @@
     </div>
   </div>
 
-  <!-- ─── Winner Overlay ────────────────────── -->
   <div class="winner-overlay" id="winner-overlay">
     <div class="winner-card">
       <div class="winner-trophy">🏆</div>
@@ -114,7 +103,7 @@
     </div>
   </div>
 
-  <script src="/socket.io/socket.io.js"></script>
+  <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
   <script src="/js/board.js"></script>
   <script src="/js/game.js"></script>
 </body>
