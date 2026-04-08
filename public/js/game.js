@@ -140,6 +140,9 @@ socket.on('joined_room', (data) => {
   if (isHost) {
     $btnStart.style.display = 'inline-block';
   }
+
+  // Push fake history state to trap the mobile back button
+  pushFakeHistory();
 });
 
 socket.on('player_joined', (data) => {
@@ -437,6 +440,20 @@ $btnCancelLeave.addEventListener('click', () => {
 
 $btnConfirmLeave.addEventListener('click', () => {
   window.location.reload(); // Cleanly disconnects the socket and resets the app state
+});
+
+// ─── Browser Back Button Trap ──────────────────────────────────
+
+function pushFakeHistory() {
+  history.pushState({ inGame: true }, '', window.location.href);
+}
+
+window.addEventListener('popstate', (e) => {
+  if (roomId) {
+    $leaveOverlay.classList.add('active');
+    // Push the state again to maintain the trap if they click 'Cancel'
+    pushFakeHistory();
+  }
 });
 
 // ─── Chat ──────────────────────────────────────────────────────
