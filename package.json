@@ -1,0 +1,14 @@
+{
+  "name": "snake-and-ladder",
+  "version": "1.0.0",
+  "description": "Multiplayer Snake and Ladder Game",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "dependencies": {
+    "express": "^5.2.1",
+    "socket.io": "^4.8.3"
+  }
+}

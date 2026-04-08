@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Snake & Ladder - Multiplayer</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎲</text></svg>">
+</head>
+<body>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- ─── Lobby ──────────────────────────────── -->
+  <div id="lobby">
+    <h1 class="lobby-title">Snake & Ladder</h1>
+    <p class="lobby-subtitle">Multiplayer Board Game</p>
+
+    <div class="lobby-card">
+      <h3>Enter Your Name</h3>
+      <div class="input-group">
+        <input type="text" id="player-name" placeholder="Your name..." maxlength="15" autofocus>
+      </div>
+
+      <div style="display:flex; gap:0.5rem; margin-bottom:1.5rem">
+        <button class="btn btn-primary" id="btn-create" style="flex:1">Create Room</button>
+      </div>
+
+      <h3>Or Join a Room</h3>
+      <div class="input-group">
+        <input type="text" id="room-code" placeholder="Room code...">
+        <button class="btn btn-secondary" id="btn-join">Join</button>
+      </div>
+
+      <h3>Available Rooms</h3>
+      <div class="room-list" id="room-list">
+        <div class="no-rooms">No rooms available. Create one!</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── Waiting Room ──────────────────────── -->
+  <div id="waiting-room">
+    <div class="waiting-card">
+      <h2>Waiting Room</h2>
+      <div class="room-code" id="display-room-code"></div>
+      <p style="color:var(--text-dim); margin-bottom:1rem">Share this code with friends</p>
+
+      <div class="player-list" id="waiting-players"></div>
+
+      <p class="waiting-dots" style="color:var(--text-dim); margin:1rem 0">Waiting for players</p>
+
+      <button class="btn btn-gold" id="btn-start" style="display:none">Start Game</button>
+    </div>
+  </div>
+
+  <!-- ─── Game Screen ───────────────────────── -->
+  <div id="game-screen">
+    <div class="game-layout">
+      <div class="board-container">
+        <canvas id="board-canvas" width="600" height="600"></canvas>
+      </div>
+
+      <div class="side-panel">
+        <!-- Turn Indicator -->
+        <div class="panel-card">
+          <h3>Current Turn</h3>
+          <div class="turn-indicator" id="turn-indicator">Waiting...</div>
+        </div>
+
+        <!-- Number Chooser -->
+        <div class="panel-card" id="chooser-panel">
+          <h3>Choose Your Number</h3>
+          <div class="number-chooser" id="number-chooser">
+            <!-- Filled by JS -->
+          </div>
+        </div>
+
+        <!-- Scoreboard -->
+        <div class="panel-card">
+          <h3>Players</h3>
+          <div id="scoreboard"></div>
+        </div>
+
+        <!-- Move Log -->
+        <div class="panel-card">
+          <h3>Move Log</h3>
+          <div class="move-log" id="move-log"></div>
+        </div>
+
+        <!-- Chat Box -->
+        <div class="panel-card chat-panel">
+          <h3>Chat</h3>
+          <div class="chat-messages" id="chat-messages"></div>
+          <div class="chat-input-row">
+            <button class="emoji-toggle-btn" id="emoji-toggle" title="Emojis">😀</button>
+            <input type="text" id="chat-input" placeholder="Type a message..." maxlength="200" autocomplete="off">
+            <button class="chat-send-btn" id="chat-send">Send</button>
+          </div>
+          <div class="emoji-picker" id="emoji-picker"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── Winner Overlay ────────────────────── -->
+  <div class="winner-overlay" id="winner-overlay">
+    <div class="winner-card">
+      <div class="winner-trophy">🏆</div>
+      <div class="winner-name" id="winner-name"></div>
+      <div class="winner-text">Wins the game!</div>
+      <button class="btn btn-gold" id="btn-restart">Play Again</button>
+    </div>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/js/board.js"></script>
+  <script src="/js/game.js"></script>
+</body>
+</html>
