@@ -640,3 +640,30 @@ body {
   font-size: 1.1rem;
   margin-bottom: 2rem;
 }
+
+/* ─── Responsive / Mobile View ──────────────────── */
+@media (max-width: 800px) {
+  .game-layout {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .board-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  .side-panel {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .lobby-title {
+    font-size: 2.2rem;
+  }
+
+  .lobby-card, .waiting-card, .winner-card {
+    padding: 1.5rem;
+  }
+}
