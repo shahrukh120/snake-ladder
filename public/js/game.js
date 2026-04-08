@@ -45,6 +45,10 @@ const $tutorialText = document.getElementById('tutorial-text');
 const $btnTutorialSkip = document.getElementById('btn-tutorial-skip');
 const $btnTutorialNext = document.getElementById('btn-tutorial-next');
 
+// Audio Elements
+const $bgMusic = document.getElementById('bg-music');
+const $btnMute = document.getElementById('btn-mute');
+
 // Board
 const canvas = document.getElementById('board-canvas');
 const board = new BoardRenderer(canvas);
@@ -569,6 +573,33 @@ window.addEventListener('DOMContentLoaded', () => {
     showTutorialStep(0);
   }
 });
+
+// ─── Audio Management ──────────────────────────────────────────
+
+// Lower default volume so it's not too loud
+$bgMusic.volume = 0.25;
+
+function toggleMusic() {
+  if ($bgMusic.paused) {
+    $bgMusic.play().catch(e => console.warn('Audio play failed:', e));
+    $btnMute.textContent = '🔊';
+  } else {
+    $bgMusic.pause();
+    $btnMute.textContent = '🔇';
+  }
+}
+
+$btnMute.addEventListener('click', (e) => {
+  e.stopPropagation(); // Prevent triggering the global interaction listener
+  toggleMusic();
+});
+
+// Browsers block autoplay, so we start music on the first user interaction
+document.body.addEventListener('click', () => {
+  if ($bgMusic.paused && $btnMute.textContent === '🔇') {
+    toggleMusic();
+  }
+}, { once: true });
 
 // ─── Toast Notifications ───────────────────────────────────────
 
