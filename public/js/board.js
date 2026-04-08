@@ -333,11 +333,18 @@ class BoardRenderer {
       if (p) {
         const fromXY = this.posToXY(mp.currentDisplayPos);
         const toXY = this.posToXY(mp.nextDisplayPos);
-        const t = mp.cellProgress;
+        let t = mp.cellProgress;
+        
+        // Apply easing for a smooth slide
+        if (mp.isSlide) {
+          t = t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+        }
+
         const px = fromXY.x + (toXY.x - fromXY.x) * t;
         const py = fromXY.y + (toXY.y - fromXY.y) * t;
         // Bounce effect
-        const bounce = -Math.sin(t * Math.PI) * 15;
+        const bounce = mp.isSlide ? 0 : -Math.sin(mp.cellProgress * Math.PI) * 15;
+        
         this._drawPlayerToken(px, py + bounce, p.color, p.name, true);
       }
     }
@@ -443,6 +450,48 @@ class BoardRenderer {
         mp.cellProgress = 0;
         mp.currentDisplayPos = mp.path[mp.pathIndex];
         mp.nextDisplayPos = mp.path[mp.pathIndex + 1];
+      }
+
+      this.render();
+    }, INTERVAL);
+  }
+
+  // ─── Animate Player Sliding directly (for Snakes/Ladders) ────
+  animatePlayerSlide(playerIndex, fromPos, toPos, callback) {
+    if (fromPos === toPos) {
+      if (callback) callback();
+      return;
+    }
+
+    this.movingPlayer = {
+      index: playerIndex,
+      path: [fromPos, toPos],
+      pathIndex: 0,
+      currentDisplayPos: fromPos,
+      nextDisplayPos: toPos,
+      cellProgress: 0,
+      isSlide: true
+    };
+    this.onMoveComplete = callback;
+
+    const INTERVAL = 16; // ~60fps
+    const fromXY = this.posToXY(fromPos);
+    const toXY = this.posToXY(toPos);
+    const dist = Math.hypot(toXY.x - fromXY.x, toXY.y - fromXY.y);
+    const slideDuration = Math.max(600, dist * 1.5); // Scale duration based on distance
+
+    const timer = setInterval(() => {
+      const mp = this.movingPlayer;
+      if (!mp) { clearInterval(timer); return; }
+
+      mp.cellProgress += INTERVAL / slideDuration;
+
+      if (mp.cellProgress >= 1) {
+        clearInterval(timer);
+        this.movingPlayer = null;
+        this.render();
+        if (this.onMoveComplete) this.onMoveComplete();
+        return;
       }
 
       this.render();

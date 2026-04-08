@@ -221,7 +221,7 @@ socket.on('move_result', (data) => {
         board.flashCell(intermediatePosition);
 
         setTimeout(() => {
-          board.animatePlayerMove(playerIndex, intermediatePosition, finalPosition, () => {
+          board.animatePlayerSlide(playerIndex, intermediatePosition, finalPosition, () => {
             finishMove(data);
           });
         }, 300);
