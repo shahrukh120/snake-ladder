@@ -103,11 +103,14 @@
   </div>
 
   <div id="game-screen">
+    <button id="mobile-chat-fab" class="chat-fab">💬<span id="chat-badge" class="chat-badge hidden">0</span></button>
+    
     <div class="game-layout">
       
       <!-- Left Panel: Chat -->
       <div class="side-panel left-panel">
         <div class="panel-card chat-panel">
+          <button id="chat-close-btn" class="chat-close-btn" title="Close Chat">&times;</button>
           <h3>Chat</h3>
           <div class="chat-messages" id="chat-messages"></div>
           <div class="chat-input-row">
@@ -120,6 +123,7 @@
       </div>
 
       <div class="board-container">
+        <div id="floating-bubbles-container" class="floating-bubbles-container"></div>
         <canvas id="board-canvas" width="600" height="600"></canvas>
       </div>
 

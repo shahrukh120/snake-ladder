@@ -599,6 +599,45 @@ body {
   transform: scale(1.1);
 }
 
+/* ─── Floating In-Game Bubbles ──────────────────── */
+.floating-bubbles-container {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  right: 10px;
+  pointer-events: none;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: flex-start;
+}
+
+.floating-bubble {
+  background: rgba(15, 15, 35, 0.85);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  border: 1px solid rgba(255,255,255,0.1);
+  animation: bubbleFade 4s forwards;
+  max-width: 80%;
+  word-break: break-word;
+}
+
+@keyframes bubbleFade {
+  0% { opacity: 0; transform: translateY(-10px); }
+  10% { opacity: 1; transform: translateY(0); }
+  85% { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(-10px); }
+}
+
+/* Hide mobile UI elements on desktop */
+.chat-fab { display: none; }
+.chat-close-btn { display: none; }
+.chat-badge { display: none; }
+
 /* ─── Overlays (Winner, Leave, Tutorial) ────────── */
 .winner-overlay {
   position: fixed;
@@ -678,9 +717,87 @@ body {
     order: 2;
   }
 
+  /* Mobile Sliding Chat Drawer */
   .left-panel {
-    order: 3;
-    height: auto;
+    position: fixed;
+    bottom: -100%;
+    left: 0;
+    width: 100vw;
+    height: 60vh;
+    max-width: 100%;
+    z-index: 2500;
+    background: var(--bg-dark);
+    border-top: 2px solid var(--gold);
+    border-radius: 20px 20px 0 0;
+    padding: 1rem;
+    transition: bottom 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    box-shadow: 0 -10px 40px rgba(0,0,0,0.5);
+  }
+
+  .left-panel.open {
+    bottom: 0;
+  }
+
+  .chat-panel {
+    height: 100%;
+    border: none;
+    background: transparent;
+    padding: 0;
+    position: relative;
+  }
+
+  .chat-close-btn {
+    display: block;
+    position: absolute;
+    top: -5px;
+    right: 0;
+    background: none;
+    border: none;
+    font-size: 2rem;
+    color: var(--text-dim);
+    cursor: pointer;
+    line-height: 1;
+    z-index: 10;
+  }
+
+  .chat-fab {
+    display: flex;
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: var(--blue);
+    border: 2px solid rgba(255,255,255,0.1);
+    color: white;
+    font-size: 1.8rem;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    z-index: 1500;
+    cursor: pointer;
+  }
+
+  .chat-badge {
+    display: flex;
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: var(--red);
+    color: white;
+    font-size: 0.8rem;
+    font-weight: 900;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+  }
+
+  .chat-badge.hidden { display: none; }
+
   }
 
   .lobby-title {

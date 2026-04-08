@@ -6,6 +6,7 @@ let myIndex = -1;
 let isHost = false;
 let roomId = null;
 let myAvailableNumbers = [1, 2, 3, 4, 5, 6]; // "Hand of Cards" mechanic
+let unreadChatCount = 0; // Tracks missed chat messages on mobile
 let gameState = {
   players: [],
   snakes: {},
@@ -37,6 +38,11 @@ const $btnLeaveGame = document.getElementById('btn-leave-game');
 const $leaveOverlay = document.getElementById('leave-overlay');
 const $btnCancelLeave = document.getElementById('btn-cancel-leave');
 const $btnConfirmLeave = document.getElementById('btn-confirm-leave');
+const $mobileChatFab = document.getElementById('mobile-chat-fab');
+const $chatBadge = document.getElementById('chat-badge');
+const $chatCloseBtn = document.getElementById('chat-close-btn');
+const $leftPanel = document.querySelector('.left-panel');
+const $floatingBubblesContainer = document.getElementById('floating-bubbles-container');
 
 // Tutorial Elements
 const $tutorialOverlay = document.getElementById('tutorial-overlay');
@@ -488,10 +494,40 @@ socket.on('chat_message', (data) => {
   $chatMessages.appendChild(msg);
   $chatMessages.scrollTop = $chatMessages.scrollHeight;
 
+  // Mobile Unread Badge logic
+  if (window.innerWidth <= 1000 && !$leftPanel.classList.contains('open')) {
+    unreadChatCount++;
+    $chatBadge.textContent = unreadChatCount > 99 ? '99+' : unreadChatCount;
+    $chatBadge.classList.remove('hidden');
+  }
+
+  // Spawn Floating Bubble over game board
+  spawnFloatingBubble(data.name, data.color, data.text);
+
   // Keep chat manageable
   while ($chatMessages.children.length > 100) {
     $chatMessages.removeChild($chatMessages.firstChild);
   }
+});
+
+function spawnFloatingBubble(name, color, text) {
+  const bubble = document.createElement('div');
+  bubble.className = 'floating-bubble';
+  bubble.innerHTML = `<strong style="color:${color}">${escapeHtml(name)}:</strong> ${escapeHtml(text)}`;
+  $floatingBubblesContainer.appendChild(bubble);
+
+  setTimeout(() => { if (bubble.parentElement) bubble.remove(); }, 4000);
+}
+
+$mobileChatFab.addEventListener('click', () => {
+  $leftPanel.classList.add('open');
+  unreadChatCount = 0;
+  $chatBadge.classList.add('hidden');
+  $chatMessages.scrollTop = $chatMessages.scrollHeight; // Auto-scroll to latest on open
+});
+
+$chatCloseBtn.addEventListener('click', () => {
+  $leftPanel.classList.remove('open');
 });
 
 function escapeHtml(str) {
