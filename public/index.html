@@ -6,8 +6,55 @@
   <title>Snake & Ladder - Multiplayer</title>
   <link rel="stylesheet" href="/css/style.css">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎲</text></svg>">
+  <style>
+    /* ─── Dynamic Scrolling Background ─── */
+    .dynamic-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: -1;
+      overflow: hidden;
+      background-color: #000;
+    }
+    .bg-track {
+      display: flex;
+      width: max-content;
+      height: 100%;
+      /* 60s controls the speed. Increase for slower, decrease for faster */
+      animation: scrollBg 60s linear infinite; 
+    }
+    .bg-track img {
+      height: 100%;
+      width: auto;
+      object-fit: cover;
+      opacity: 1; /* Fully visible images */
+    }
+    @keyframes scrollBg {
+      0% { transform: translateX(0); }
+      /* Translating by -50% perfectly aligns the duplicated second half */
+      100% { transform: translateX(-50%); } 
+    }
+    /* Ensure the original stylesheet's body background doesn't hide the dynamic background */
+    body {
+      background: transparent !important;
+    }
+  </style>
 </head>
 <body>
+
+  <div class="dynamic-bg">
+    <div class="bg-track">
+      <!-- First Set of Images -->
+      <img src="/assets/parallax-mountain.png" alt="">
+   
+      
+      
+      <!-- Duplicate Set (Required for seamless looping) -->
+    <img src="/assets/parallax-mountain.png" alt="">
+    </div>
+  </div>
 
   <div class="toast-container" id="toast-container"></div>
 
