@@ -5,6 +5,7 @@ const socket = io();
 let myIndex = -1;
 let isHost = false;
 let roomId = null;
+let myAvailableNumbers = [1, 2, 3, 4, 5, 6]; // "Hand of Cards" mechanic
 let gameState = {
   players: [],
   snakes: {},
@@ -32,6 +33,10 @@ const $scoreboard = document.getElementById('scoreboard');
 const $moveLog = document.getElementById('move-log');
 const $winnerOverlay = document.getElementById('winner-overlay');
 const $winnerName = document.getElementById('winner-name');
+const $btnLeaveGame = document.getElementById('btn-leave-game');
+const $leaveOverlay = document.getElementById('leave-overlay');
+const $btnCancelLeave = document.getElementById('btn-cancel-leave');
+const $btnConfirmLeave = document.getElementById('btn-confirm-leave');
 
 // Board
 const canvas = document.getElementById('board-canvas');
@@ -171,6 +176,7 @@ socket.on('game_started', (data) => {
   gameState.ladders = data.ladders;
   gameState.currentTurnIndex = data.currentTurnIndex;
   gameState.started = true;
+  myAvailableNumbers = [1, 2, 3, 4, 5, 6]; // Reset hand on start
 
   showScreen('game');
   $winnerOverlay.classList.remove('active');
@@ -285,6 +291,13 @@ function buildNumberChooser() {
     btn.appendChild(dots);
     btn.addEventListener('click', () => {
       if (btn.disabled) return;
+      
+      // "Hand of Cards" logic: Consume card, replenish if all 6 are used
+      myAvailableNumbers = myAvailableNumbers.filter(x => x !== n);
+      if (myAvailableNumbers.length === 0) {
+        myAvailableNumbers = [1, 2, 3, 4, 5, 6];
+      }
+
       socket.emit('choose_number', n);
       disableChooser();
     });
@@ -296,7 +309,12 @@ function updateNumberChooser() {
   const isMyTurn = gameState.currentTurnIndex === myIndex;
   const btns = $numberChooser.querySelectorAll('.num-btn');
   btns.forEach(btn => {
-    btn.disabled = !isMyTurn;
+    const num = parseInt(btn.dataset.num);
+    const isAvailable = myAvailableNumbers.includes(num);
+    
+    btn.disabled = !isMyTurn || !isAvailable;
+    btn.style.opacity = isAvailable ? '1' : '0.2'; // Visual cue for used cards
+    btn.style.transform = isAvailable ? 'scale(1)' : 'scale(0.9)';
   });
 }
 
@@ -337,12 +355,17 @@ function addMoveLog(name, num, oldPos, midPos, finalPos, hitSnake, hitLadder) {
   const entry = document.createElement('div');
   entry.className = 'log-entry';
 
-  let text = `<span class="player-name">${name}</span> chose <b>${num}</b> → ${midPos}`;
-
-  if (hitSnake) {
-    text += ` <span class="snake-text">🐍 Snake! → ${finalPos}</span>`;
-  } else if (hitLadder) {
-    text += ` <span class="ladder-text">🪜 Ladder! → ${finalPos}</span>`;
+  let text;
+  // "Burn to Skip" Rule: If it pushes past 100, no movement happens
+  if (oldPos + num > 100 && oldPos === finalPos) {
+    text = `<span class="player-name">${name}</span> burned <b>${num}</b> and stayed at ${oldPos}`;
+  } else {
+    text = `<span class="player-name">${name}</span> chose <b>${num}</b> → ${midPos}`;
+    if (hitSnake) {
+      text += ` <span class="snake-text">🐍 Snake! → ${finalPos}</span>`;
+    } else if (hitLadder) {
+      text += ` <span class="ladder-text">🪜 Ladder! → ${finalPos}</span>`;
+    }
   }
 
   entry.innerHTML = text;
@@ -384,6 +407,20 @@ function spawnConfetti() {
     setTimeout(() => piece.remove(), 5000);
   }
 }
+
+// ─── Leave Game ────────────────────────────────────────────────
+
+$btnLeaveGame.addEventListener('click', () => {
+  $leaveOverlay.classList.add('active');
+});
+
+$btnCancelLeave.addEventListener('click', () => {
+  $leaveOverlay.classList.remove('active');
+});
+
+$btnConfirmLeave.addEventListener('click', () => {
+  window.location.reload(); // Cleanly disconnects the socket and resets the app state
+});
 
 // ─── Chat ──────────────────────────────────────────────────────
 

@@ -76,6 +76,10 @@
         </div>
 
         <div class="panel-card">
+          <button class="btn btn-secondary" id="btn-leave-game" style="width: 100%; border-color: #e74c3c; color: #e74c3c;">Surrender / Leave Game</button>
+        </div>
+
+        <div class="panel-card">
           <h3>Move Log</h3>
           <div class="move-log" id="move-log"></div>
         </div>
@@ -100,6 +104,17 @@
       <div class="winner-name" id="winner-name"></div>
       <div class="winner-text">Wins the game!</div>
       <button class="btn btn-gold" id="btn-restart">Play Again</button>
+    </div>
+  </div>
+
+  <div class="winner-overlay" id="leave-overlay">
+    <div class="winner-card" style="border-color: #e74c3c;">
+      <h2 style="color: #e74c3c; margin-top: 0;">Leave Game?</h2>
+      <div class="winner-text" style="font-size: 1rem; margin: 1rem 0; line-height: 1.5;">Are you sure you want to leave?<br>Leaving now will forfeit the match and you will be disconnected from the room.</div>
+      <div style="display: flex; gap: 1rem; justify-content: center; margin-top: 1.5rem;">
+        <button class="btn btn-secondary" id="btn-cancel-leave" style="flex: 1;">Cancel</button>
+        <button class="btn btn-primary" id="btn-confirm-leave" style="flex: 1; background: #e74c3c; border-color: #e74c3c; color: white;">Leave</button>
+      </div>
     </div>
   </div>
 

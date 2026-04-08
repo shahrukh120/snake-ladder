@@ -164,14 +164,17 @@ io.on('connection', (socket) => {
     console.log(`🎲 [player_chose] room=${roomId} player="${currentPlayer.name}" chose=${num} from_pos=${currentPlayer.position}`);
 
     // Calculate new position
-    let newPos = currentPlayer.position + num;
+    const oldPos = currentPlayer.position;
+    let newPos = oldPos + num;
+    let burned = false;
+
     if (newPos > BOARD_SIZE) {
-      // Can't move past 100, stay in place
-      console.log(`   ⚠️  [bounce_back] ${newPos} > 100, staying at ${currentPlayer.position}`);
-      newPos = currentPlayer.position;
+      // ─── The "Burn to Skip" Rule ───
+      console.log(`   🔥 [burn_card] ${newPos} > 100, card burned. Staying at ${oldPos}`);
+      newPos = oldPos;
+      burned = true;
     }
 
-    const oldPos = currentPlayer.position;
     currentPlayer.position = newPos;
 
     // Shuffle snakes and ladders AFTER the move choice
@@ -192,16 +195,18 @@ io.on('connection', (socket) => {
     let entityFrom = newPos;
     let entityTo = newPos;
 
-    if (newSnakes[newPos]) {
-      finalPos = newSnakes[newPos];
-      hitSnake = true;
-      entityTo = finalPos;
-      console.log(`   🐍 [snake_hit] "${currentPlayer.name}" bitten! ${newPos} → ${finalPos}`);
-    } else if (newLadders[newPos]) {
-      finalPos = newLadders[newPos];
-      hitLadder = true;
-      entityTo = finalPos;
-      console.log(`   🪜 [ladder_hit] "${currentPlayer.name}" climbed! ${newPos} → ${finalPos}`);
+    if (!burned) {
+      if (newSnakes[newPos]) {
+        finalPos = newSnakes[newPos];
+        hitSnake = true;
+        entityTo = finalPos;
+        console.log(`   🐍 [snake_hit] "${currentPlayer.name}" bitten! ${newPos} → ${finalPos}`);
+      } else if (newLadders[newPos]) {
+        finalPos = newLadders[newPos];
+        hitLadder = true;
+        entityTo = finalPos;
+        console.log(`   🪜 [ladder_hit] "${currentPlayer.name}" climbed! ${newPos} → ${finalPos}`);
+      }
     }
 
     currentPlayer.position = finalPos;
