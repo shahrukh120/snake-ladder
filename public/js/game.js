@@ -38,6 +38,13 @@ const $leaveOverlay = document.getElementById('leave-overlay');
 const $btnCancelLeave = document.getElementById('btn-cancel-leave');
 const $btnConfirmLeave = document.getElementById('btn-confirm-leave');
 
+// Tutorial Elements
+const $tutorialOverlay = document.getElementById('tutorial-overlay');
+const $tutorialTitle = document.getElementById('tutorial-title');
+const $tutorialText = document.getElementById('tutorial-text');
+const $btnTutorialSkip = document.getElementById('btn-tutorial-skip');
+const $btnTutorialNext = document.getElementById('btn-tutorial-next');
+
 // Board
 const canvas = document.getElementById('board-canvas');
 const board = new BoardRenderer(canvas);
@@ -516,6 +523,52 @@ function showScreen(screen) {
       break;
   }
 }
+
+// ─── Tutorial / Tour Management ────────────────────────────────
+
+const tutorialSteps = [
+  {
+    title: "Welcome!",
+    text: "Welcome to <b>Strategic Snake & Ladder</b>!<br><br>This isn't just a game of luck. We've introduced new mechanics that turn this classic into a thoughtful resource management puzzle."
+  },
+  {
+    title: "Hand of Cards",
+    text: "Instead of rolling a dice, you have a <b>'Hand of Cards'</b> (1 to 6).<br><br>You choose exactly which number to play. Once you use a number, it's locked until you've played all six of your cards!"
+  },
+  {
+    title: "Burn to Skip",
+    text: "Are you on 98 and only have a 6 left? <br><br>If a card pushes you past 100, you <b>'burn'</b> it! Your piece doesn't move, the card is consumed, and you safely skip the traps on your current square."
+  },
+  {
+    title: "Shifting Board",
+    text: "Watch out! After <i>every single turn</i>, the Snakes and Ladders <b>shuffle</b> to entirely new positions.<br><br>Plan ahead and outsmart your opponents!"
+  }
+];
+
+let currentTutorialStep = 0;
+
+function showTutorialStep(step) {
+  if (step >= tutorialSteps.length) {
+    $tutorialOverlay.classList.remove('active');
+    localStorage.setItem('snakeLadderTutorialSeen', 'true');
+    return;
+  }
+  $tutorialTitle.innerHTML = tutorialSteps[step].title;
+  $tutorialText.innerHTML = tutorialSteps[step].text;
+  
+  $btnTutorialNext.textContent = step === 0 ? "Start Tour" : (step === tutorialSteps.length - 1 ? "Let's Play!" : "Next");
+  $btnTutorialSkip.style.display = step === tutorialSteps.length - 1 ? "none" : "block";
+}
+
+$btnTutorialNext.addEventListener('click', () => showTutorialStep(++currentTutorialStep));
+$btnTutorialSkip.addEventListener('click', () => showTutorialStep(tutorialSteps.length));
+
+window.addEventListener('DOMContentLoaded', () => {
+  if (localStorage.getItem('snakeLadderTutorialSeen') !== 'true') {
+    $tutorialOverlay.classList.add('active');
+    showTutorialStep(0);
+  }
+});
 
 // ─── Toast Notifications ───────────────────────────────────────
 

@@ -118,6 +118,17 @@
     </div>
   </div>
 
+  <div class="winner-overlay" id="tutorial-overlay">
+    <div class="winner-card" style="border-color: #3498db; max-width: 450px;">
+      <h2 id="tutorial-title" style="color: #3498db; margin-top: 0;">Welcome!</h2>
+      <div id="tutorial-text" class="winner-text" style="font-size: 1rem; margin: 1.5rem 0; line-height: 1.6;"></div>
+      <div style="display: flex; gap: 1rem; justify-content: center; margin-top: 1.5rem;">
+        <button class="btn btn-secondary" id="btn-tutorial-skip" style="flex: 1;">Skip</button>
+        <button class="btn btn-primary" id="btn-tutorial-next" style="flex: 1; background: #3498db; border-color: #3498db; color: white;">Start Tour</button>
+      </div>
+    </div>
+  </div>
+
   <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
   <script src="/js/board.js"></script>
   <script src="/js/game.js"></script>
