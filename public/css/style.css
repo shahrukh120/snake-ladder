@@ -584,3 +584,59 @@ body {
   background: rgba(255, 255, 255, 0.1);
   transform: scale(1.1);
 }
+
+/* ─── Overlays (Winner, Leave, Tutorial) ────────── */
+.winner-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(15, 15, 35, 0.85); /* Dark semi-transparent background */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  opacity: 0;               /* Hidden by default */
+  pointer-events: none;     /* Clicks pass through when hidden */
+  transition: opacity 0.3s ease;
+}
+
+.winner-overlay.active {
+  opacity: 1;               /* Visible when active */
+  pointer-events: all;      /* Capture clicks */
+}
+
+.winner-card {
+  background: var(--bg-card);
+  border: 2px solid var(--gold);
+  border-radius: 16px;
+  padding: 2.5rem;
+  text-align: center;
+  max-width: 400px;
+  width: 90%;
+  transform: translateY(20px);
+  transition: transform 0.3s ease;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+}
+
+.winner-overlay.active .winner-card {
+  transform: translateY(0);
+}
+
+.winner-trophy {
+  font-size: 4rem;
+  margin-bottom: 0.5rem;
+}
+
+.winner-name {
+  font-size: 2.5rem;
+  font-weight: 900;
+  margin-bottom: 0.5rem;
+}
+
+.winner-text {
+  color: var(--text-dim);
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+}

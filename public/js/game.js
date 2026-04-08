@@ -581,8 +581,18 @@ $bgMusic.volume = 0.25;
 
 function toggleMusic() {
   if ($bgMusic.paused) {
-    $bgMusic.play().catch(e => console.warn('Audio play failed:', e));
-    $btnMute.textContent = '🔊';
+    const playPromise = $bgMusic.play();
+    if (playPromise !== undefined) {
+      playPromise.then(() => {
+        $btnMute.textContent = '🔊';
+      }).catch(e => {
+        console.warn('Audio play failed:', e);
+        if (e.name === 'NotSupportedError') {
+          showToast('Music file missing! Add soundtrack.mp3 to assets.', 'error');
+        }
+        $btnMute.textContent = '🔇'; // Revert button state on failure
+      });
+    }
   } else {
     $bgMusic.pause();
     $btnMute.textContent = '🔇';
