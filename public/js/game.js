@@ -1,5 +1,15 @@
 // ─── Game Client ───────────────────────────────────────────────
-const socket = io();
+
+// 1. Ask the browser if we are testing locally
+const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+
+// 2. Set the server URL based on the answer
+const BACKEND_URL = isLocal 
+    ? "http://localhost:3000" // Use this when testing on your computer
+    : "https://snake-ladder-d2px.onrender.com"; // Use this when playing on itch.io
+
+// 3. Connect to the correct server
+const socket = io(BACKEND_URL);
 
 // State
 let myIndex = -1;
