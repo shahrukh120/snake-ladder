@@ -104,11 +104,26 @@
 
   <div id="game-screen">
     <div class="game-layout">
+      
+      <!-- Left Panel: Chat -->
+      <div class="side-panel left-panel">
+        <div class="panel-card chat-panel">
+          <h3>Chat</h3>
+          <div class="chat-messages" id="chat-messages"></div>
+          <div class="chat-input-row">
+            <button class="emoji-toggle-btn" id="emoji-toggle" title="Emojis">😀</button>
+            <input type="text" id="chat-input" placeholder="Type a message..." maxlength="200" autocomplete="off">
+            <button class="chat-send-btn" id="chat-send">Send</button>
+          </div>
+          <div class="emoji-picker" id="emoji-picker"></div>
+        </div>
+      </div>
+
       <div class="board-container">
         <canvas id="board-canvas" width="600" height="600"></canvas>
       </div>
 
-      <div class="side-panel">
+      <div class="side-panel right-panel">
         <div class="panel-card">
           <h3>Current Turn</h3>
           <div class="turn-indicator" id="turn-indicator">Waiting...</div>
@@ -132,17 +147,6 @@
         <div class="panel-card">
           <h3>Move Log</h3>
           <div class="move-log" id="move-log"></div>
-        </div>
-
-        <div class="panel-card chat-panel">
-          <h3>Chat</h3>
-          <div class="chat-messages" id="chat-messages"></div>
-          <div class="chat-input-row">
-            <button class="emoji-toggle-btn" id="emoji-toggle" title="Emojis">😀</button>
-            <input type="text" id="chat-input" placeholder="Type a message..." maxlength="200" autocomplete="off">
-            <button class="chat-send-btn" id="chat-send">Send</button>
-          </div>
-          <div class="emoji-picker" id="emoji-picker"></div>
         </div>
       </div>
     </div>
