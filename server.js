@@ -295,15 +295,16 @@ io.on('connection', (socket) => {
           const removed = game.players.splice(playerIndex, 1)[0];
           console.log(`   👤 [player_removed] "${removed.name}" from room=${roomId} (${game.players.length} remaining)`);
 
-          // Adjust turn index
-          if (game.currentTurnIndex >= game.players.length) {
-            game.currentTurnIndex = 0;
-          }
-
           if (game.players.length === 0) {
+            // The room is now empty, delete it completely to prevent memory leaks
             games.delete(roomId);
             console.log(`   🗑️  [room_deleted] room=${roomId} (empty)`);
           } else {
+            // Adjust turn index for the remaining players
+            if (game.currentTurnIndex >= game.players.length) {
+              game.currentTurnIndex = 0;
+            }
+
             io.to(roomId).emit('player_left', {
               playerName: removed.name,
               players: game.players.map(sanitizePlayer),
